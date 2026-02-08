@@ -377,55 +377,21 @@ function updateCharCount() {
 }
 
 // ========== WORLD MAP ==========
-window.mapInitialized = false;
-
-function initWorldMap() {
-  const width = document.getElementById('worldMap').clientWidth;
-  const height = 600;
-  
-  const svg = d3.select("#worldMap")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
-  
-  const projection = d3.geoNaturalEarth1()
-    .scale(width / 5)
-    .translate([width / 2, height / 2]);
-  
-  const path = d3.geoPath().projection(projection);
-  
-  // Load world map data
-  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
-    .then(data => {
-      const countries = topojson.feature(data, data.objects.countries);
-      
-      svg.selectAll("path")
-        .data(countries.features)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("fill", d => getCountryColor(d.properties.name))
-        .attr("stroke", "var(--border)")
-        .attr("stroke-width", 0.5)
-        .style("cursor", "pointer")
-        .on("mouseover", function(event, d) {
-          d3.select(this)
-            .attr("fill", "var(--accent)")
-            .attr("stroke-width", 2);
-        })
-        .on("mouseout", function(event, d) {
-          d3.select(this)
-            .attr("fill", getCountryColor(d.properties.name))
-            .attr("stroke-width", 0.5);
-        })
-        .on("click", function(event, d) {
-          showCountryInfo(d.properties.name);
-        });
-      
-      window.mapInitialized = true;
-    });
+.world-map {
+  width: 100%;
+  height: 600px;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  overflow: visible;
+  position: relative;
+  border: 2px solid var(--border);
 }
 
+.world-map svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 function getCountryColor(countryName) {
   const literacyRate = getEducationData(countryName).literacyRate;
   
